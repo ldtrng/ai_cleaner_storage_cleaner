@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Three stacked palette pills -->
+    <path android:fillColor="#6B9071"
+        android:pathData="M40,32 h28 a11,11 0 0 1 0,22 h-28 a11,11 0 0 1 0,-22 z" />
+    <path android:fillColor="#AEC3B0"
+        android:pathData="M40,44 h28 a11,11 0 0 1 0,22 h-28 a11,11 0 0 1 0,-22 z" />
+    <path android:fillColor="#E3EED4"
+        android:pathData="M40,56 h28 a11,11 0 0 1 0,22 h-28 a11,11 0 0 1 0,-22 z" />
+    <!-- Sparkle -->
+    <path android:fillColor="#E3EED4"
+        android:pathData="M74,18 Q75,25 81,26 Q75,27 74,34 Q73,27 67,26 Q73,25 74,18 Z" />
+</vector>

@@ -1,0 +1,39 @@
+name: ai_cleaner
+description: "AI Cleaner - storage cleaner for Android (photos, videos, contacts, events, apps)."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  crypto: ^3.0.7
+  flutter:
+    sdk: flutter
+  flutter_contacts: ^2.6.0
+  flutter_image_compress: ^2.5.1
+  google_mobile_ads: ^9.1.0
+  in_app_review: ^2.0.12
+  local_auth: ^3.0.2
+  path: ^1.9.1
+  path_provider: ^2.1.6
+  permission_handler: ^12.0.1
+  photo_manager: ^3.12.0
+  photo_manager_image_provider: ^2.2.0
+  share_plus: ^13.3.1
+  shared_preferences: ^2.5.6
+  url_launcher: ^6.3.3
+  video_player: ^2.14.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Outfit
+      fonts:
+        - asset: assets/fonts/Outfit.ttf
+
