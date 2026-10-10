@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../core/firebase.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_contacts/flutter_contacts.dart' as fc;
 
@@ -360,6 +362,10 @@ class _VaultHomeState extends State<_VaultHome> {
       cancel: 'No, keep both',
     );
     if (del) await media.delete(added, permanent: true);
+    Analytics.event('secret_space_add', {
+      'kind': 'media',
+      'count': added.length,
+    });
     if (mounted) showToast(context, 'Media files have been added.');
   }
 
@@ -389,6 +395,10 @@ class _VaultHomeState extends State<_VaultHome> {
       await fc.FlutterContacts.deleteAll(picked.map((c) => c.id!).toList());
       await repo.load();
     }
+    Analytics.event('secret_space_add', {
+      'kind': 'contacts',
+      'count': picked.length,
+    });
     if (mounted) showToast(context, 'Contacts have been added.');
   }
 

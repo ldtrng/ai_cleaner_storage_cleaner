@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../core/firebase.dart';
+
 import '../core/format.dart';
 import '../core/native.dart';
 import '../core/settings.dart';
@@ -126,6 +128,14 @@ class _SmartCleanScreenState extends State<SmartCleanScreen> {
     final total = removed.length + contactsDone + eventsDone;
     if (total == 0) return;
     final freed = media.bytesOf(removed);
+    Analytics.event('clean_complete', {
+      'source': 'smart_clean',
+      'items': total,
+      'media': removed.length,
+      'contacts': contactsDone,
+      'events': eventsDone,
+      'bytes': freed,
+    });
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (_) => SuccessScreen(

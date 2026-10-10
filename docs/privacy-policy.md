@@ -4,7 +4,7 @@ _Last updated: October 10, 2026_
 
 AI Cleaner ("the app") helps you free up storage on your Android device. This policy explains what the app accesses and why.
 
-In short: **all cleaning happens on your device. Your photos, videos, contacts and calendar never leave your phone.** The app shows ads served by Google AdMob, which collects limited device data as described below.
+In short: **all cleaning happens on your device. Your photos, videos, contacts and calendar never leave your phone.** The app shows ads served by Google AdMob and uses Google Firebase for anonymous usage analytics and remote settings, as described below.
 
 ## Data the app accesses
 
@@ -21,9 +21,15 @@ The app uses Google AdMob to show ads. AdMob may collect and process your device
 
 If you are in the EEA, the UK or Switzerland, you are asked for consent before personalized ads are shown, and you can change your choice anytime in **Settings → Privacy settings**. You can also reset or delete your advertising ID in your Android settings.
 
+## Analytics and remote settings
+
+The app uses **Firebase Analytics** to understand how features are used (for example: a scan finished, how many items were cleaned and how much space was freed, which screens were opened). These events contain counts and sizes only — never file names, photos, contact details or calendar contents. Firebase collects an app-instance ID, device model, OS version, country/region and similar device information. See [how Google uses data from partner apps](https://policies.google.com/technologies/partner-sites).
+
+The app uses **Firebase Remote Config** to download settings such as ad frequency. This sends an app-instance ID to Google but no personal content.
+
 ## Data sharing
 
-The data listed under "Data the app accesses" is never transmitted off your device. Only the advertising data described above is shared with Google AdMob.
+The data listed under "Data the app accesses" is never transmitted off your device. Only the advertising and analytics data described above is shared with Google (AdMob and Firebase).
 
 ## Data deletion
 

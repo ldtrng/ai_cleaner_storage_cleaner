@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../theme/app_theme.dart';
+import '../core/firebase.dart';
 import 'ads_service.dart';
 
 /// Anchored adaptive banner. Collapses to nothing until an ad is loaded.
@@ -31,6 +32,7 @@ class _BannerAdBarState extends State<BannerAdBar> {
 
   Future<void> _maybeLoad() async {
     if (!mounted || !AdsService.instance.canRequestAds.value) return;
+    if (!Config.adsEnabled || !Config.flag('banner_home_enabled')) return;
     final width = MediaQuery.sizeOf(context).width.truncate();
     if (_ad != null && _width == width) return;
     _width = width;
@@ -110,6 +112,7 @@ class _NativeAdCardState extends State<NativeAdCard> {
     if (!mounted || _ad != null || !AdsService.instance.canRequestAds.value) {
       return;
     }
+    if (!Config.adsEnabled || !Config.flag('native_success_enabled')) return;
     final dark = context.isDark;
     final fg = dark ? Palette.cream : Palette.forest;
     _ad = NativeAd(

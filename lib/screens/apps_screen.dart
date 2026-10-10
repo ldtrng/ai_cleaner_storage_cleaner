@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../core/firebase.dart';
+
 import '../core/format.dart';
 import '../core/native.dart';
 import '../data/apps_repository.dart';
@@ -86,6 +88,13 @@ class _AppsScreenState extends State<AppsScreen> with WidgetsBindingObserver {
     }
     _resumed = null;
     repo.removeLocal(removed.map((a) => a.package).toSet());
+    if (removed.isNotEmpty) {
+      Analytics.cleaned(
+        'apps',
+        items: removed.length,
+        bytes: removed.fold(0, (a, e) => a + (e.size > 0 ? e.size : 0)),
+      );
+    }
     _sel.removeAll(removed.map((a) => a.package));
     if (!mounted || removed.isEmpty) return;
     final freed = removed.fold(0, (a, e) => a + (e.size > 0 ? e.size : 0));

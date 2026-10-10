@@ -36,9 +36,7 @@ class _SplashScreenState extends State<SplashScreen>
     ]);
     // No app-open ad on the very first launch (before onboarding).
     if (AppSettings.instance.onboardingDone) {
-      await AdsService.instance.showAppOpenOnLaunch(
-        wait: const Duration(seconds: 3),
-      );
+      await AdsService.instance.showAppOpenOnLaunch();
     }
     _next();
   }

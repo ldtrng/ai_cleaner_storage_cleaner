@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../core/firebase.dart';
+
 import '../core/format.dart';
 import '../core/settings.dart';
 import '../data/media_repository.dart';
@@ -55,6 +57,12 @@ class _MediaCleanerScreenState extends State<MediaCleanerScreen> {
     final done = await repo.delete(items);
     if (!mounted || done.isEmpty) return;
     _selection[r.category]!.removeAll(done.map((e) => e.id));
+    Analytics.event('clean_complete', {
+      'source': widget.video ? 'videos' : 'photos',
+      'category': r.category.name,
+      'items': done.length,
+      'bytes': repo.bytesOf(done),
+    });
     final trash = AppSettings.instance.mediaRecovery == MediaRecovery.trash;
     Navigator.of(context).push(
       MaterialPageRoute(

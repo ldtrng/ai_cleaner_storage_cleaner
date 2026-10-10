@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import '../ads/ads_service.dart';
+import '../core/firebase.dart';
 import '../core/native.dart';
 import '../core/settings.dart';
 
@@ -256,8 +257,15 @@ class MediaRepository extends ChangeNotifier {
     analysisProgress = 0;
     notifyListeners();
 
+    final started = DateTime.now();
     await _analyzePhotos();
     _computePhotoCategories();
+    Analytics.event('scan_complete', {
+      'photos': photos.length,
+      'videos': videos.length,
+      'analysis_ms': DateTime.now().difference(started).inMilliseconds,
+      'cleanable_bytes': photosToCleanBytes + videosToCleanBytes,
+    });
     state = ScanState.done;
     notifyListeners();
   }
@@ -387,7 +395,10 @@ class MediaRepository extends ChangeNotifier {
     final blurry =
         analyzed
             .where(
-              (p) => !p.isScreenshot && p.sharpness < 15 && p.contrast > 12,
+              (p) =>
+                  !p.isScreenshot &&
+                  p.sharpness < Config.decimal('blurry_sharpness_threshold') &&
+                  p.contrast > 12,
             )
             .toList()
           ..sort((a, b) => a.sharpness.compareTo(b.sharpness));

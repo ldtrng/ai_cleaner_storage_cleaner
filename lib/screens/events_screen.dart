@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../core/firebase.dart';
+
 import '../core/format.dart';
 import '../core/native.dart';
 import '../data/events_repository.dart';
@@ -37,6 +39,7 @@ class _EventsScreenState extends State<EventsScreen> {
     if (!ok || !mounted) return;
     final n = await runWithProgress(context, (_) => repo.delete(list));
     _sel.removeAll(list.map((e) => e.id));
+    Analytics.cleaned('events', items: n);
     if (!mounted) return;
     Navigator.of(context).push(
       MaterialPageRoute(

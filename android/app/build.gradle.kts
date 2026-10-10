@@ -7,9 +7,13 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Release signing: key.properties + keystore live outside the repo.
+// Override the folder with AI_CLEANER_KEYSTORE_DIR (e.g. on CI).
+val keystoreDir = System.getenv("AI_CLEANER_KEYSTORE_DIR")?.let { File(it) }
+    ?: File(System.getProperty("user.home"), "Documents/ldtr_key_storage")
 val keystoreProperties = Properties().apply {
-    val f = rootProject.file("key.properties")
-    if (f.exists()) load(FileInputStream(f))
+    val f = File(keystoreDir, "key.properties")
+    if (f.exists()) FileInputStream(f).use { load(it) }
 }
 
 android {
@@ -37,7 +41,7 @@ android {
             if (keystoreProperties.isNotEmpty()) {
                 keyAlias = keystoreProperties["keyAlias"] as String
                 keyPassword = keystoreProperties["keyPassword"] as String
-                storeFile = rootProject.file(keystoreProperties["storeFile"] as String)
+                storeFile = File(keystoreDir, keystoreProperties["storeFile"] as String)
                 storePassword = keystoreProperties["storePassword"] as String
             }
         }
@@ -52,6 +56,11 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+}
+
+// Firebase: only wire google-services when the config file is present, so the app still builds without it.
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
 }
 
 kotlin {

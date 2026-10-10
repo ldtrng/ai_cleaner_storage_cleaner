@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+import '../core/firebase.dart';
+
 /// Ad unit IDs. Debug/profile builds always use Google's test units so real ads are never clicked during development.
 abstract final class AdIds {
   static const _real = kReleaseMode;
@@ -33,8 +35,15 @@ class AdsService with WidgetsBindingObserver {
   AdsService._();
   static final instance = AdsService._();
 
-  static const _interstitialCooldown = Duration(minutes: 3);
-  static const _appOpenBackgroundThreshold = Duration(minutes: 4);
+  // Tunable from Firebase Remote Config (defaults in Config.defaults).
+  static Duration get _interstitialCooldown =>
+      Duration(seconds: Config.integer('interstitial_cooldown_sec'));
+  static Duration get _appOpenBackgroundThreshold =>
+      Duration(minutes: Config.integer('app_open_background_min'));
+  static bool get _interstitialOn =>
+      Config.adsEnabled && Config.flag('interstitial_enabled');
+  static bool get _appOpenOn =>
+      Config.adsEnabled && Config.flag('app_open_enabled');
   static const _fullScreenGap = Duration(seconds: 60);
   static const _appOpenMaxAge = Duration(hours: 4);
 
@@ -109,7 +118,10 @@ class AdsService with WidgetsBindingObserver {
   // ---------------------------------------------------------------- interstitial
 
   void _loadInterstitial() {
-    if (!canRequestAds.value || _interstitial != null || _loadingInterstitial) {
+    if (!canRequestAds.value ||
+        !_interstitialOn ||
+        _interstitial != null ||
+        _loadingInterstitial) {
       return;
     }
     _loadingInterstitial = true;
@@ -136,7 +148,11 @@ class AdsService with WidgetsBindingObserver {
       _loadInterstitial();
       return;
     }
-    if (successCount < 2 || _showingFullScreen) return;
+    if (!_interstitialOn ||
+        successCount < Config.integer('interstitial_min_success') ||
+        _showingFullScreen) {
+      return;
+    }
     if (DateTime.now().difference(_lastFullScreen) < _interstitialCooldown) {
       return;
     }
@@ -147,7 +163,7 @@ class AdsService with WidgetsBindingObserver {
   // ---------------------------------------------------------------- app open
 
   void _loadAppOpen() {
-    if (!canRequestAds.value || _loadingAppOpen) return;
+    if (!canRequestAds.value || !_appOpenOn || _loadingAppOpen) return;
     if (_appOpen != null &&
         DateTime.now().difference(_appOpenLoadedAt!) < _appOpenMaxAge) {
       return;
@@ -173,9 +189,11 @@ class AdsService with WidgetsBindingObserver {
   }
 
   /// Cold-start app open ad, waits up to [wait] for it to load.
-  Future<void> showAppOpenOnLaunch({
-    Duration wait = const Duration(seconds: 3),
-  }) async {
+  Future<void> showAppOpenOnLaunch({Duration? wait}) async {
+    if (!_appOpenOn) return;
+    wait ??= Duration(
+      milliseconds: Config.integer('app_open_cold_start_wait_ms'),
+    );
     final deadline = DateTime.now().add(wait);
     while (_appOpen == null &&
         canRequestAds.value &&
@@ -211,7 +229,9 @@ class AdsService with WidgetsBindingObserver {
       _backgroundedAt = null;
       final suppressed = _suppressNextResume || _showingFullScreen;
       _suppressNextResume = false;
-      if (!suppressed && away >= _appOpenBackgroundThreshold) _showAppOpen();
+      if (!suppressed && _appOpenOn && away >= _appOpenBackgroundThreshold) {
+        _showAppOpen();
+      }
     }
   }
 

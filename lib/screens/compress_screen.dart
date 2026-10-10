@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+
+import '../core/firebase.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:photo_manager/photo_manager.dart';
 
@@ -228,6 +230,13 @@ class _CompressScreenState extends State<CompressScreen> {
     repo.scan(force: true);
     if (!mounted) return;
     final pct = before > 0 ? ((before - after) * 100 / before).round() : 0;
+    Analytics.event('compress_complete', {
+      'kind': kind.name,
+      'quality': q.name,
+      'items': originals.length,
+      'saved_bytes': before - after,
+      'deleted_originals': deleteOriginals ? 1 : 0,
+    });
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => SuccessScreen(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../core/firebase.dart';
+
 import '../core/format.dart';
 import '../data/contacts_repository.dart';
 import '../theme/app_theme.dart';
@@ -69,6 +71,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
       context,
       (_) => repo.mergeGroups(groups),
     );
+    Analytics.cleaned('contacts_merge', items: removed);
     if (!mounted) return;
     _done(
       '${plural(groups.length, 'contact')} merged',
@@ -87,6 +90,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
     if (!ok || !mounted) return;
     await runWithProgress(context, (_) => repo.deleteContacts(list));
     ids.clear();
+    Analytics.cleaned('contacts_delete', items: list.length);
     if (!mounted) return;
     _done("You've cleaned your contacts", plural(list.length, 'contact'));
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../core/firebase.dart';
+
 import '../core/settings.dart';
 import '../data/media_repository.dart';
 import '../main.dart';
@@ -55,7 +57,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Future<void> _finish() async {
     AppSettings.instance.onboardingDone = true;
-    await MediaRepository.instance.requestPermission();
+    final granted = await MediaRepository.instance.requestPermission();
+    Analytics.event('onboarding_complete', {
+      'media_permission': granted ? 1 : 0,
+    });
     if (!mounted) return;
     Navigator.of(
       context,

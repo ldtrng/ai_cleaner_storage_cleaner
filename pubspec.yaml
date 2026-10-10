@@ -8,6 +8,9 @@ environment:
 
 dependencies:
   crypto: ^3.0.7
+  firebase_analytics: ^12.6.0
+  firebase_core: ^4.15.0
+  firebase_remote_config: ^6.7.0
   flutter:
     sdk: flutter
   flutter_contacts: ^2.6.0

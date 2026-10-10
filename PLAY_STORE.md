@@ -59,7 +59,7 @@ Privacy policy & terms nằm trong repo, GitHub hiển thị trực tiếp (app 
 ## 5. App content (Play Console → Policy → App content)
 
 **Data safety** (do có AdMob — khai theo hướng dẫn của Google cho Mobile Ads SDK):
-- Data collected & shared: **Yes**, mục đích *Advertising or marketing*, *Analytics*, *Fraud prevention*
+- Data collected & shared: **Yes**, mục đích *Advertising or marketing*, *Analytics*, *Fraud prevention* (AdMob + Firebase Analytics)
   - Location → *Approximate location* (từ IP)
   - App activity → *App interactions*
   - App info and performance → *Crash logs*, *Diagnostics*
@@ -79,7 +79,14 @@ Privacy policy & terms nằm trong repo, GitHub hiển thị trực tiếp (app 
 
 Không dùng: `MANAGE_EXTERNAL_STORAGE`, `QUERY_ALL_PACKAGES`, `REQUEST_INSTALL_PACKAGES` (để tránh bị từ chối).
 
-## 6. Quảng cáo (AdMob)
+## 6. Firebase
+
+Project `ai-cleaner-333d3` (AI Cleaner), app Android `io.ld2t.ai_cleaner`.
+- **Analytics** — sự kiện: `scan_complete`, `clean_complete` (source: photos / videos / smart_clean / contacts_merge / contacts_delete / events / apps), `compress_complete`, `secret_space_add`, `onboarding_complete`, `screen_view` tự động cho mọi màn hình.
+- **Remote Config** — 10 tham số điều khiển quảng cáo + ngưỡng ảnh mờ, mẫu ở `docs/remote-config.json`, mặc định trong `lib/core/firebase.dart`. Đổi giá trị trên console → Publish là app nhận trong ≤1 giờ (debug: 1 phút).
+- Cần file `android/app/google-services.json` (tải ở Project settings → Your apps). Không có file này app vẫn build/chạy nhưng không gửi Analytics / không lấy Remote Config.
+
+## 6b. Quảng cáo (AdMob)
 
 App ID và ad unit thật nằm trong `lib/ads/ads_service.dart` + `AndroidManifest.xml`. Bản debug/profile **tự dùng test ad unit của Google** (`kReleaseMode`), chỉ bản release mới dùng ID thật — không bấm quảng cáo trên bản release của chính mình.
 

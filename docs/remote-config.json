@@ -1,0 +1,54 @@
+{
+  "parameters": {
+    "ads_enabled": {
+      "defaultValue": { "value": "true" },
+      "description": "Master switch for all ads",
+      "valueType": "BOOLEAN"
+    },
+    "banner_home_enabled": {
+      "defaultValue": { "value": "true" },
+      "description": "Anchored banner on Home",
+      "valueType": "BOOLEAN"
+    },
+    "native_success_enabled": {
+      "defaultValue": { "value": "true" },
+      "description": "Native ad on the Congratulations screen",
+      "valueType": "BOOLEAN"
+    },
+    "interstitial_enabled": {
+      "defaultValue": { "value": "true" },
+      "description": "Interstitial when leaving the Congratulations screen",
+      "valueType": "BOOLEAN"
+    },
+    "interstitial_cooldown_sec": {
+      "defaultValue": { "value": "180" },
+      "description": "Minimum seconds between full-screen ads",
+      "valueType": "NUMBER"
+    },
+    "interstitial_min_success": {
+      "defaultValue": { "value": "2" },
+      "description": "Show interstitials starting from this successful clean",
+      "valueType": "NUMBER"
+    },
+    "app_open_enabled": {
+      "defaultValue": { "value": "true" },
+      "description": "App open ads (cold start + return from background)",
+      "valueType": "BOOLEAN"
+    },
+    "app_open_cold_start_wait_ms": {
+      "defaultValue": { "value": "3000" },
+      "description": "Max time the splash waits for an app open ad",
+      "valueType": "NUMBER"
+    },
+    "app_open_background_min": {
+      "defaultValue": { "value": "4" },
+      "description": "Minutes in background before an app open ad on return",
+      "valueType": "NUMBER"
+    },
+    "blurry_sharpness_threshold": {
+      "defaultValue": { "value": "15" },
+      "description": "Laplacian variance below which a photo counts as blurry",
+      "valueType": "NUMBER"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'core/firebase.dart';
 import 'core/settings.dart';
 import 'screens/splash_screen.dart';
 import 'theme/app_theme.dart';
@@ -10,6 +11,7 @@ const appName = 'AI Cleaner';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppSettings.init();
+  await AppFirebase.init();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   runApp(const CleanerApp());
 }
@@ -39,6 +41,7 @@ class CleanerApp extends StatelessWidget {
             child: child!,
           );
         },
+        navigatorObservers: [ScreenViewObserver()],
         home: const SplashScreen(),
       ),
     );

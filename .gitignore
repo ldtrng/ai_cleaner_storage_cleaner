@@ -50,3 +50,6 @@ android/*.jks
 *.xapk
 .DS_Store
 *.iml
+
+# Firebase config (API key) — keep out of the public repo
+android/app/google-services.json
