@@ -9,7 +9,7 @@ Package: `io.ld2t.ai_cleaner` · minSdk 29 (Android 10) · targetSdk 36 · versi
 | `build/app/outputs/bundle/release/app-release.aab` | Bản phát hành (Production / Internal testing) |
 | `store/icon-512.png` | App icon 512×512 |
 | `store/feature-graphic.png` | Feature graphic 1024×500 |
-| Ảnh chụp màn hình | Tối thiểu 2 ảnh điện thoại — chụp từ emulator/thiết bị thật |
+| `store/screenshots/01.png … 08.png` | 8 ảnh chụp màn hình điện thoại (1080×2160) — xem `store/ASO.md` §6 |
 
 Build lại khi đổi code:
 
@@ -28,8 +28,8 @@ Mỗi lần upload bản mới phải tăng số sau dấu `+` trong `pubspec.ya
 ## 3. Trước khi gửi duyệt — cần thay
 
 Privacy policy & terms nằm trong repo, GitHub hiển thị trực tiếp (app mở các link này từ Settings):
-- Privacy policy: https://github.com/ldtrng/ai_cleaner_storage_cleaner/blob/main/docs/privacy-policy.md ← dán link này vào Play Console
-- Terms of use: https://github.com/ldtrng/ai_cleaner_storage_cleaner/blob/main/docs/terms.md
+- Privacy policy: https://ldtrng.github.io/ai_cleaner_storage_cleaner/privacy-policy.html ← dán link này vào Play Console
+- Terms of use: https://ldtrng.github.io/ai_cleaner_storage_cleaner/terms.html
 - Repo phải để **public** thì link mới mở được. Sửa nội dung → commit & push là link tự cập nhật.
 - Email hỗ trợ: `ldtrong258@gmail.com` (`lib/core/config.dart`).
 

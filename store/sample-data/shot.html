@@ -1,0 +1,23 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box;margin:0;font-family:-apple-system,Helvetica,Arial,sans-serif}
+body{width:1080px;height:2400px;background:var(--bg);color:var(--fg);overflow:hidden}
+.sb{height:90px;display:flex;justify-content:space-between;padding:30px 48px;font-size:34px}
+.hd{padding:40px 48px;font-size:64px;font-weight:700;background:var(--ac);color:#fff}
+.row{display:flex;align-items:center;gap:36px;padding:34px 48px;border-bottom:2px solid rgba(128,128,128,.18)}
+.av{width:120px;height:120px;border-radius:60px;background:var(--ac);opacity:.85;flex:none}
+.t1{font-size:44px;font-weight:600}.t2{font-size:36px;opacity:.6;margin-top:8px}
+.card{margin:36px 48px;border-radius:36px;background:rgba(128,128,128,.14);padding:48px;height:420px;font-size:48px;font-weight:600}
+.bar{height:34px;border-radius:17px;background:var(--ac);opacity:.7;margin-top:26px}
+.nav{position:absolute;bottom:0;left:0;right:0;height:200px;background:rgba(128,128,128,.16);display:flex;justify-content:space-around;align-items:center}
+.nav i{width:90px;height:90px;border-radius:30px;background:var(--ac);opacity:.7}
+</style></head><body><div class="sb"><span>18:15</span><span>● ▲ ▮</span></div><div class="hd" id="h"></div><div id="b"></div><div class="nav"><i></i><i></i><i></i><i></i></div>
+<script>
+const q=new URLSearchParams(location.search),k=+q.get('k')||0;
+const T=[['Messages','#128c7e','#ffffff','#111'],['Settings','#3b6ef5','#f5f6fa','#111'],['Shop','#e8590c','#ffffff','#111'],['Maps','#2b8a3e','#e9ecef','#111'],['Notes','#f59f00','#1e1e1e','#eee'],['Weather','#1c7ed6','#0b2239','#eee'],['Music','#c2255c','#16111a','#eee'],['Wallet','#5f3dc4','#ffffff','#111']];
+const [n,ac,bg,fg]=T[k%8];const r=document.documentElement.style;r.setProperty('--ac',ac);r.setProperty('--bg',bg);r.setProperty('--fg',fg);
+document.getElementById('h').textContent=n;
+const names=['Anna Lee','Marco R.','Team Sync','Mom','Sam K.','Dev Group','Priya','Jordan','Luca','Sofia','Kenji','Olivia'];
+let h='';if(k%2==0){for(let i=0;i<9;i++)h+=`<div class="row"><div class="av" style="opacity:${.5+((i*k)%5)/10}"></div><div><div class="t1">${names[(i+k)%12]}</div><div class="t2">See you at ${3+i}:${i}0 · ${i+1}m ago</div></div></div>`}
+else{h+=`<div class="card">${n} overview<div class="bar" style="width:80%"></div><div class="bar" style="width:55%"></div><div class="bar" style="width:68%"></div></div>`;for(let i=0;i<6;i++)h+=`<div class="row"><div class="av" style="border-radius:24px"></div><div><div class="t1">${names[(i*2+k)%12]}</div><div class="t2">Item ${i+k} · $${(i+3)*k+9}.00</div></div></div>`}
+document.getElementById('b').innerHTML=h;
+</script></body></html>
