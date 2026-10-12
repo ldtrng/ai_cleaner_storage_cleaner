@@ -37,7 +37,9 @@ Ngoài ra có app tên gần trùng: **"AI Cleaner – Phone Cleaner" (GRIMLAX T
 **Title (27/30):** `AI Cleaner: Storage Cleaner`
 - Giữ thương hiệu + đầu từ "storage cleaner" (Play index title mạnh nhất). Không emoji / CAPS / "best" / "free".
 
-**Short description (75/80):** `Delete duplicate photos, merge contacts, compress videos & free up storage.`
+**Short description (75/80):** `Delete duplicate photos, merge contacts, compress videos & reclaim storage.`
+
+> ⚠️ **Nguồn chính thức của copy listing: `store/listing/short-description.txt` và `store/listing/full-description.txt`.** Khối full description bên dưới chỉ để tham khảo, có thể lỗi thời.
 
 **Full description (1.934/4.000):**
 
@@ -143,7 +145,7 @@ Cách tạo (lặp lại được):
 
 ## 7. Feature graphic (1024×500)
 
-`store/feature-graphic.png` (nguồn: `store/feature.html`) đã làm lại: headline lợi ích "Free up storage in a few taps", tagline, 5 chip tính năng, icon mới. Chữ nằm trong vùng giữa vì Play có thể cắt mép.
+`store/feature-graphic.png` (nguồn: `store/feature.html`) đã làm lại: headline lợi ích (xem `store/feature.html`), tagline, 5 chip tính năng, icon mới. Chữ nằm trong vùng giữa vì Play có thể cắt mép.
 
 ## 8. Rủi ro & việc nên làm trước khi submit
 
@@ -167,3 +169,13 @@ Cách tạo (lặp lại được):
 | 4 | Quyết định tên thương hiệu | — |
 | 5 | Localization (vi, pt-BR, es, id) | nửa ngày |
 | 6 | Store listing experiment sau khi có traffic | sau launch |
+
+## 10. QUY TẮC METADATA — đừng dùng chữ "free" (đã dính thật, 2026-10-12)
+
+Short description cũ có "free up storage" → Play Console hiện card **giới hạn phân phối** (distribution restricted). Sau khi bỏ chữ "free" khỏi short description, card biến mất. Play chặn từ khoá mang tính quảng bá/giá ("free", "best", "#1", "top", "new", "sale"…) trong metadata.
+
+- **Không dùng** "free" (kể cả "free up", "free trial", "free space") ở: title, short description, full description, **chữ trong feature graphic và screenshot**, video. Thay bằng: "clear", "reclaim", "get back", "save space".
+- Cũng tránh: "best", "#1", "top", "boost", "fastest", "virus", "RAM cleaner".
+- Nói "không có subscription / không có trial period" thay vì "no free trial".
+- Mọi copy mới phải chạy: `grep -n -i "free\|best\|#1" store/listing/*.txt store/feature.html store/screenshots/template.html`
+- Ghi chú: chữ "free" trong chính app (onboarding, settings) và privacy policy không phải metadata store, không ảnh hưởng.

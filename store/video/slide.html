@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Outfit;src:url("../../assets/fonts/Outfit.ttf");font-weight:100 900}
+*{box-sizing:border-box;margin:0}
+body{width:1920px;height:1080px;overflow:hidden;font-family:Outfit,sans-serif;position:relative;background:linear-gradient(135deg,#3F6240,#0F2A1D);color:#E3EED4}
+.glow{position:absolute;left:900px;top:100px;width:1000px;height:1000px;border-radius:50%;background:radial-gradient(circle,rgba(217,242,107,.18),rgba(217,242,107,0) 65%)}
+.t{position:absolute;left:150px;top:0;bottom:0;width:900px;display:flex;flex-direction:column;justify-content:center}
+h1{font-size:120px;line-height:1.04;font-weight:700;letter-spacing:-3px}
+h1 em{font-style:normal;color:#D9F26B}
+p{margin-top:32px;font-size:44px;color:#AEC3B0;font-weight:400}
+.phone{position:absolute;left:1180px;top:90px;width:560px;height:1100px;border-radius:64px 64px 0 0;background:#08140d;padding:12px 12px 0;box-shadow:0 40px 120px rgba(0,0,0,.55),0 0 0 3px rgba(227,238,212,.12)}
+.phone img{display:block;width:536px;height:1000px;object-fit:cover;object-position:top;border-radius:54px 54px 0 0}
+.c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.c img{width:300px;height:300px;border-radius:68px;box-shadow:0 24px 60px rgba(0,0,0,.45);margin-bottom:50px}
+.c h1{font-size:110px}
+</style></head><body><div class="glow"></div><div id="root"></div>
+<script>
+const D=[
+ ["Clear storage<br><em>in a few taps</em>","Duplicate photos, contacts &amp; videos","01_home"],
+ ["Delete <em>duplicate</em><br>photos","Grouped automatically, preview before you delete","02_dups"],
+ ["Keep the <em>sharpest</em>,<br>clear the rest","Similar shots in one list","03_similar"],
+ ["Clear <em>blurry</em><br>photos","Spot soft shots in seconds","04_blurry"],
+ ["<em>Compress</em> photos<br>&amp; videos","High, Medium or Low quality","05_compress"],
+ ["Merge <em>duplicate</em><br>contacts","Back up and restore locally","06_contacts"],
+ ["Clean old<br><em>calendar events</em>","Remove past events in one go","07_events"],
+ ["<em>Lock</em> private photos<br>&amp; contacts","PIN or fingerprint","08_secret"]];
+const n=+new URLSearchParams(location.search).get('n'),r=document.getElementById('root');
+if(n==0)r.innerHTML='<div class="c"><img src="../icon.svg"><h1>AI <em>Cleaner</em></h1><p>Storage cleaner for your phone</p></div>';
+else if(n==9)r.innerHTML='<div class="c"><img src="../icon.svg"><h1>Get your <em>storage</em> back</h1><p>100% on-device · No account · No subscription</p></div>';
+else{const d=D[n-1];r.innerHTML=`<div class="t"><h1>${d[0]}</h1><p>${d[1]}</p></div><div class="phone"><img src="../screenshots/raw/${d[2]}.png"></div>`;}
+</script></body></html>

@@ -1,0 +1,43 @@
+Clear phone storage in a few taps. AI Cleaner is a storage cleaner that finds duplicate photos, similar photos, blurry shots, screenshots and screen recordings on your device, then helps you keep the sharpest one and clear the rest.
+
+Everything runs on your phone. No account, no subscription, no trial period. Your photos, contacts and calendar never leave your device.
+
+PHONE STORAGE CLEANER FEATURES
+
+📸 Photo cleaner
+• Duplicate photos and similar photos grouped together, with the top pick suggested
+• Blurry photos and old screenshots in one list
+• Preview everything before you delete
+
+🎬 Video cleaner & compressor
+• Find duplicate videos, screen recordings and short clips
+• Compress large photos and videos with High, Medium or Low quality to save gigabytes
+
+👥 Contacts cleaner
+• Merge duplicate contacts and remove incomplete entries
+• Back up your contacts locally and restore them any time
+
+📅 Calendar cleaner
+• Delete old and past calendar events in one go
+
+📱 App manager
+• See which apps take the most storage and which ones you haven't used for a while
+
+🔒 Secret Space
+• Hide private photos, videos and contacts behind a PIN or fingerprint
+
+⚡ Smart Clean
+• One scan shows everything you can clean, and how much space you will get back
+
+SAFE BY DESIGN
+• You review every item before anything is removed
+• Deleted photos and videos go to your phone's Trash, so you can restore them (30 days by default, configurable)
+• Light ads that never appear in the middle of a scan, delete or compression
+• Light and dark themes
+
+PERMISSIONS, EXPLAINED
+• Photos and videos: to scan your whole gallery for duplicates, blurry shots and large files. The Android photo picker can't do this, because the scan must cover the whole library.
+• Contacts and Calendar: only if you open those cleaners.
+• Usage access: only for App Manager, to show app size and last-used time.
+
+Running out of space? Download AI Cleaner and get your storage back.

@@ -1,8 +1,7 @@
 /// Store / legal links.
 abstract final class AppConfig {
   static const packageName = 'io.ld2t.ai_cleaner';
-  static const storeUrl =
-      'https://play.google.com/store/apps/details?id=$packageName';
+  static const storeUrl = 'https://play.google.com/store/apps/details?id=$packageName';
 
   static const repoUrl = 'https://ldtrng.github.io/ai_cleaner_storage_cleaner';
 

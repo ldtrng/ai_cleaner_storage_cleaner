@@ -35,12 +35,14 @@ Privacy policy & terms nằm trong repo, GitHub hiển thị trực tiếp (app 
 
 ## 4. Store listing (gợi ý)
 
+> ⚠️ **KHÔNG dùng chữ "free" (free up, free trial…) trong bất kỳ metadata store nào** (title, short/full description, feature graphic, screenshot, video). Đã dính giới hạn phân phối vì "free up storage" trong short description. Chi tiết: `store/ASO.md` §10. Copy chuẩn nằm ở `store/listing/*.txt`; đoạn dưới chỉ là bản rút gọn.
+
 **App name:** AI Cleaner – Storage Cleaner
-**Short description (≤80):** Remove duplicate photos, merge contacts, compress media & free up space.
+**Short description (≤80):** Delete duplicate photos, merge contacts, compress videos & reclaim storage.
 
 **Full description:**
 
-> Free up storage in a few taps. AI Cleaner scans your gallery on-device to find duplicate, similar and blurry photos, screenshots, screen recordings and short clips, and suggests the best shot to keep.
+> Clear phone storage in a few taps. AI Cleaner scans your gallery on-device to find duplicate, similar and blurry photos, screenshots, screen recordings and short clips, and suggests the best shot to keep.
 >
 > • Smart Clean – review everything that can be cleaned in one place
 > • Photos – similar, duplicate, screenshots, blurry
