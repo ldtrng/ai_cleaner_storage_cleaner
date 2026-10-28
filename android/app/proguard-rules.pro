@@ -7,3 +7,6 @@
 # androidx.startup fails with "Failed to create an instance of androidx.work.impl.WorkDatabase".
 -keep class * extends androidx.room.RoomDatabase { <init>(); }
 -keep class androidx.work.impl.WorkDatabase_Impl { *; }
+
+# AppLovin's OMID attestation references Amazon Privacy Pass classes that aren't bundled; they're optional.
+-dontwarn com.amazon.privacypass.**
