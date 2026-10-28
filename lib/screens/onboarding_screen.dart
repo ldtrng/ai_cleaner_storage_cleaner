@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../ads/ads_service.dart';
 import '../core/firebase.dart';
 
 import '../core/settings.dart';
@@ -61,6 +62,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     Analytics.event('onboarding_complete', {
       'media_permission': granted ? 1 : 0,
     });
+    AdsService.instance.startupReady.value = true;
     if (!mounted) return;
     Navigator.of(
       context,

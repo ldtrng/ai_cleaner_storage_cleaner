@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../ads/ad_widgets.dart';
 import '../core/format.dart';
 import '../data/contacts_repository.dart';
 import '../data/events_repository.dart';
@@ -66,7 +65,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return GradientScaffold(
-      bottom: const BannerAdBar(),
       body: SafeArea(
         bottom: false,
         child: ListenableBuilder(

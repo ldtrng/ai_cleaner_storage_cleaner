@@ -43,6 +43,10 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _next() {
     if (!mounted) return;
+    // The banner waits for this: not over the splash/app open ad, nor during first-run onboarding.
+    if (AppSettings.instance.onboardingDone) {
+      AdsService.instance.startupReady.value = true;
+    }
     final target = AppSettings.instance.onboardingDone
         ? const HomeScreen()
         : const OnboardingScreen();

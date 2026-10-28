@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'ads/ad_widgets.dart';
 import 'core/firebase.dart';
 import 'core/settings.dart';
 import 'screens/splash_screen.dart';
@@ -38,7 +39,8 @@ class CleanerApp extends StatelessWidget {
                       statusBarColor: Colors.transparent,
                       systemNavigationBarColor: Colors.transparent,
                     ),
-            child: child!,
+            // One banner under every page (see AdBannerHost).
+            child: AdBannerHost(child: child!),
           );
         },
         navigatorObservers: [ScreenViewObserver()],

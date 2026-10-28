@@ -66,93 +66,99 @@ class _SuccessScreenState extends State<SuccessScreen> {
     final freed =
         widget.freedLabel ??
         (widget.freedBytes != null ? formatBytes(widget.freedBytes!) : null);
-    return GradientScaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, box) => SingleChildScrollView(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: box.maxHeight),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(height: 16),
-                          TweenAnimationBuilder<double>(
-                            tween: Tween(begin: 0, end: 1),
-                            duration: const Duration(milliseconds: 1200),
-                            builder: (context, v, _) => PillStack(
-                              width: 170,
-                              progress: v,
-                              child: Transform.scale(
-                                scale: Curves.elasticOut.transform(
-                                  ((v - 0.7) / 0.3).clamp(0, 1),
-                                ),
-                                child: const Icon(
-                                  Icons.check_rounded,
-                                  size: 36,
-                                  color: Palette.moss,
+    // No banner here: it would sit right under the "Great!" button.
+    return HideBanner(
+      child: GradientScaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              children: [
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, box) => SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: box.maxHeight),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 16),
+                            TweenAnimationBuilder<double>(
+                              tween: Tween(begin: 0, end: 1),
+                              duration: const Duration(milliseconds: 1200),
+                              builder: (context, v, _) => PillStack(
+                                width: 170,
+                                progress: v,
+                                child: Transform.scale(
+                                  scale: Curves.elasticOut.transform(
+                                    ((v - 0.7) / 0.3).clamp(0, 1),
+                                  ),
+                                  child: const Icon(
+                                    Icons.check_rounded,
+                                    size: 36,
+                                    color: Palette.moss,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 32),
-                          Text(
-                            'Congratulations!',
-                            style: context.text.headlineMedium,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            widget.title,
-                            style: context.text.titleMedium?.copyWith(
-                              color: context.tokens.textMuted,
-                              fontWeight: FontWeight.w500,
+                            const SizedBox(height: 32),
+                            Text(
+                              'Congratulations!',
+                              style: context.text.headlineMedium,
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 28),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _Stat(
-                                  label: widget.firstLabel,
-                                  value: widget.deleted,
-                                ),
+                            const SizedBox(height: 6),
+                            Text(
+                              widget.title,
+                              style: context.text.titleMedium?.copyWith(
+                                color: context.tokens.textMuted,
+                                fontWeight: FontWeight.w500,
                               ),
-                              if (freed != null) ...[
-                                const SizedBox(width: 12),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 28),
+                            Row(
+                              children: [
                                 Expanded(
-                                  child: _Stat(label: 'Freed up', value: freed),
+                                  child: _Stat(
+                                    label: widget.firstLabel,
+                                    value: widget.deleted,
+                                  ),
                                 ),
+                                if (freed != null) ...[
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: _Stat(
+                                      label: 'Freed up',
+                                      value: freed,
+                                    ),
+                                  ),
+                                ],
                               ],
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                        ],
+                            ),
+                            const SizedBox(height: 16),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              // Native ad sits well above the primary button, separated by the note, to avoid accidental taps.
-              const NativeAdCard(small: true),
-              const SizedBox(height: 20),
-              if (widget.note != null)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Text(
-                    widget.note!,
-                    textAlign: TextAlign.center,
-                    style: context.text.bodySmall,
+                // Native ad sits well above the primary button, separated by the note, to avoid accidental taps.
+                const NativeAdCard(small: true),
+                const SizedBox(height: 20),
+                if (widget.note != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      widget.note!,
+                      textAlign: TextAlign.center,
+                      style: context.text.bodySmall,
+                    ),
                   ),
-                ),
-              FilledButton(onPressed: _close, child: const Text('Great!')),
-              const SizedBox(height: 16),
-            ],
+                FilledButton(onPressed: _close, child: const Text('Great!')),
+                const SizedBox(height: 16),
+              ],
+            ),
           ),
         ),
       ),

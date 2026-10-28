@@ -29,11 +29,9 @@ abstract final class Config {
     'banner_home_enabled': true,
     'native_success_enabled': true,
     'interstitial_enabled': true,
-    'interstitial_cooldown_sec': 180,
-    'interstitial_min_success': 2,
+    'interstitial_every': 3,
     'app_open_enabled': true,
     'app_open_cold_start_wait_ms': 3000,
-    'app_open_background_min': 4,
     'blurry_sharpness_threshold': 15.0,
   };
 

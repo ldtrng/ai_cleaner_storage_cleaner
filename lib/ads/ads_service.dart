@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../core/firebase.dart';
+import '../core/settings.dart';
 
 /// Ad unit IDs. Debug/profile builds always use Google's test units so real ads are never clicked during development.
 abstract final class AdIds {
@@ -27,27 +28,29 @@ abstract final class AdIds {
 /// Owns consent, SDK init and the full-screen ad formats.
 ///
 /// Frequency rules:
-/// - Interstitial: only after a finished clean (Success screen → "Great!"), at most once per 3 minutes,
-///   never on the user's first successful clean.
-/// - App open: on cold start (not the first launch) and when returning after ≥4 min in background;
-///   suppressed when the app was left for a system dialog/settings, and never within 60 s of another full-screen ad.
+/// - Interstitial: only after a finished clean (Success screen → "Great!"), on the 1st successful clean and then
+///   every 3rd one (`interstitial_every`: 1st, 4th, 7th…), no time-based gap.
+/// - App open: on cold start and on every return from the background, but never during the first session after
+///   install; suppressed when the app was left for a system dialog/settings. Closing a full-screen ad of ours
+///   (interstitial or app open) is not a return from the background.
 class AdsService with WidgetsBindingObserver {
   AdsService._();
   static final instance = AdsService._();
 
   // Tunable from Firebase Remote Config (defaults in Config.defaults).
-  static Duration get _interstitialCooldown =>
-      Duration(seconds: Config.integer('interstitial_cooldown_sec'));
-  static Duration get _appOpenBackgroundThreshold =>
-      Duration(minutes: Config.integer('app_open_background_min'));
   static bool get _interstitialOn =>
       Config.adsEnabled && Config.flag('interstitial_enabled');
   static bool get _appOpenOn =>
       Config.adsEnabled && Config.flag('app_open_enabled');
-  static const _fullScreenGap = Duration(seconds: 60);
   static const _appOpenMaxAge = Duration(hours: 4);
 
   final canRequestAds = ValueNotifier<bool>(false);
+
+  /// True once the user is past splash/onboarding and the cold-start app open ad; the banner stays hidden until then.
+  final startupReady = ValueNotifier<bool>(false);
+
+  /// Number of pages currently asking the banner to step aside (see `HideBanner`).
+  final bannerHolds = ValueNotifier<int>(0);
   bool _initialized = false;
   bool privacyOptionsRequired = false;
 
@@ -57,12 +60,16 @@ class AdsService with WidgetsBindingObserver {
   bool _loadingInterstitial = false;
   bool _loadingAppOpen = false;
   bool _showingFullScreen = false;
-  DateTime _lastFullScreen = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime? _backgroundedAt;
   bool _suppressNextResume = false;
 
+  /// True for the whole session in which the app was installed (onboarding not finished at launch):
+  /// no app open ad until the next launch.
+  bool _firstSession = false;
+
   /// Gathers consent (UMP), then initializes the SDK. Never throws.
   Future<void> init() async {
+    _firstSession = !AppSettings.instance.onboardingDone;
     WidgetsBinding.instance.addObserver(this);
     final done = Completer<void>();
     ConsentInformation.instance.requestConsentInfoUpdate(
@@ -148,12 +155,11 @@ class AdsService with WidgetsBindingObserver {
       _loadInterstitial();
       return;
     }
+    // Paced by the number of finished cleans, not by time: the 1st clean, then every Nth after it.
+    final every = Config.integer('interstitial_every');
     if (!_interstitialOn ||
-        successCount < Config.integer('interstitial_min_success') ||
-        _showingFullScreen) {
-      return;
-    }
-    if (DateTime.now().difference(_lastFullScreen) < _interstitialCooldown) {
+        _showingFullScreen ||
+        (successCount - 1) % (every < 1 ? 1 : every) != 0) {
       return;
     }
     _interstitial = null;
@@ -213,7 +219,6 @@ class AdsService with WidgetsBindingObserver {
       _loadAppOpen();
       return;
     }
-    if (DateTime.now().difference(_lastFullScreen) < _fullScreenGap) return;
     _appOpen = null;
     await _show(ad, onDone: _loadAppOpen);
   }
@@ -221,15 +226,18 @@ class AdsService with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
+      // A full-screen ad of ours pauses the app too; that is not the user leaving, so closing it is no "return".
+      if (_showingFullScreen) return;
       _backgroundedAt ??= DateTime.now();
+      // Have one ready for the moment the user comes back.
+      if (!_firstSession) _loadAppOpen();
     } else if (state == AppLifecycleState.resumed) {
-      final away = _backgroundedAt == null
-          ? Duration.zero
-          : DateTime.now().difference(_backgroundedAt!);
+      // Only a real return from the background (a pause came first).
+      final wasPaused = _backgroundedAt != null;
       _backgroundedAt = null;
       final suppressed = _suppressNextResume || _showingFullScreen;
       _suppressNextResume = false;
-      if (!suppressed && _appOpenOn && away >= _appOpenBackgroundThreshold) {
+      if (wasPaused && !suppressed && !_firstSession && _appOpenOn) {
         _showAppOpen();
       }
     }
@@ -241,7 +249,6 @@ class AdsService with WidgetsBindingObserver {
     final done = Completer<void>();
     void finish(Ad a) {
       _showingFullScreen = false;
-      _lastFullScreen = DateTime.now();
       a.dispose();
       onDone();
       if (!done.isCompleted) done.complete();

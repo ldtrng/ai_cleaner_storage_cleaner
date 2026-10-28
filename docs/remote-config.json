@@ -20,14 +20,9 @@
       "description": "Interstitial when leaving the Congratulations screen",
       "valueType": "BOOLEAN"
     },
-    "interstitial_cooldown_sec": {
-      "defaultValue": { "value": "180" },
-      "description": "Minimum seconds between full-screen ads",
-      "valueType": "NUMBER"
-    },
-    "interstitial_min_success": {
-      "defaultValue": { "value": "2" },
-      "description": "Show interstitials starting from this successful clean",
+    "interstitial_every": {
+      "defaultValue": { "value": "3" },
+      "description": "Interstitial on the 1st successful clean, then every Nth after it (1st, 1+N, 1+2N…)",
       "valueType": "NUMBER"
     },
     "app_open_enabled": {
@@ -38,11 +33,6 @@
     "app_open_cold_start_wait_ms": {
       "defaultValue": { "value": "3000" },
       "description": "Max time the splash waits for an app open ad",
-      "valueType": "NUMBER"
-    },
-    "app_open_background_min": {
-      "defaultValue": { "value": "4" },
-      "description": "Minutes in background before an app open ad on return",
       "valueType": "NUMBER"
     },
     "blurry_sharpness_threshold": {
