@@ -1,0 +1,4 @@
+# Same service-account key as the other apps: it lives outside the repo next to the shared upload keystore
+# (~/Documents/ldtr_key_storage). Override with SUPPLY_JSON_KEY or PLAY_JSON_KEY.
+json_key_file(ENV['SUPPLY_JSON_KEY'] || ENV['PLAY_JSON_KEY'] || File.expand_path('~/Documents/ldtr_key_storage/play-service-account.json'))
+package_name('io.ld2t.ai_cleaner')

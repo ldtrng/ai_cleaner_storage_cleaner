@@ -1,0 +1,177 @@
+# Publishing to Google Play with fastlane `supply`.
+#
+#   cd android
+#   fastlane validate          # check the service-account key can reach the app
+#   fastlane prepare           # only lay out build/play_metadata locally (no upload)
+#   fastlane fetch_metadata    # download the live listing into build/play_metadata_remote (read-only)
+#   fastlane listing           # listing text only (title, descriptions)
+#   fastlane screenshots       # screenshots, feature graphic and icon only
+#   fastlane metadata          # listing text + screenshots + images, no binary
+#   fastlane internal          # build the bundle and upload to the internal track (binary + release notes)
+#   fastlane production        # build the bundle, upload to production and send it for review; binary + release notes only
+#   fastlane production rollout:0.2 status:inProgress   # staged rollout
+#
+# Listing text comes from store/listing (title.txt, short-description.txt, full-description.txt), images from
+# store/screenshots (01.png … and store/feature-graphic.png, store/icon-512.png), release notes from
+# store/release_notes/<versionName>.txt (see `prepare_metadata`). The upload lanes (internal, production) never
+# touch the listing or screenshots; use listing / screenshots / metadata for those. The app version is read
+# from pubspec.yaml. The service-account key and upload keystore are shared with the other apps
+# (~/Documents/ldtr_key_storage, see Appfile and android/app/build.gradle.kts).
+
+default_platform(:android)
+
+PROJECT_ROOT = File.expand_path('../..', File.expand_path(FastlaneCore::FastlaneFolder.path))
+STORE_DIR = File.join(PROJECT_ROOT, 'store')
+LISTING_DIR = File.join(STORE_DIR, 'listing')
+METADATA_DIR = File.join(PROJECT_ROOT, 'build', 'play_metadata')
+REMOTE_METADATA_DIR = File.join(PROJECT_ROOT, 'build', 'play_metadata_remote')
+AAB_PATH = File.join(PROJECT_ROOT, 'build', 'app', 'outputs', 'bundle', 'release', 'app-release.aab')
+LOCALE = 'en-US' # the only listing language for now
+BANNED_WORDS = /\bfree\b|\bbest\b|#1/i # store policy: no "free"/"best"/"#1" in any listing text
+
+def pubspec_version
+  line = File.read(File.join(PROJECT_ROOT, 'pubspec.yaml'))[/^version:\s*(\S+)/, 1]
+  UI.user_error!('version not found in pubspec.yaml') unless line
+  name, code = line.split('+')
+  [name, code]
+end
+
+# Release notes file format: <en-US>text</en-US> per locale.
+def release_notes(version_name)
+  path = File.join(STORE_DIR, 'release_notes', "#{version_name}.txt")
+  return {} unless File.exist?(path)
+  File.read(path, encoding: 'UTF-8').scan(%r{<([\w-]+)>\s*(.*?)\s*</\1>}m).to_h
+end
+
+# Lays out store/ the way supply expects (metadata/android/<locale>/...).
+def prepare_metadata
+  version_name, version_code = pubspec_version
+  notes = release_notes(version_name)
+  FileUtils.rm_rf(METADATA_DIR)
+  dir = File.join(METADATA_DIR, 'android', LOCALE)
+  FileUtils.mkdir_p(dir)
+  { 'title' => 'title', 'short_description' => 'short-description', 'full_description' => 'full-description' }.each do |out, src_name|
+    src = File.join(LISTING_DIR, "#{src_name}.txt")
+    text = File.read(src, encoding: 'UTF-8')
+    UI.user_error!("#{src} contains a banned word (#{text[BANNED_WORDS]})") if text =~ BANNED_WORDS
+    File.write(File.join(dir, "#{out}.txt"), text.strip)
+  end
+  shots = File.join(STORE_DIR, 'screenshots')
+  out = File.join(dir, 'images', 'phoneScreenshots')
+  FileUtils.mkdir_p(out)
+  Dir.glob(File.join(shots, '[0-9]*.png')).sort_by { |p| File.basename(p).to_i }.each { |p| FileUtils.cp(p, out) }
+  feature = File.join(STORE_DIR, 'feature-graphic.png')
+  FileUtils.cp(feature, File.join(dir, 'images', 'featureGraphic.png')) if File.exist?(feature)
+  icon = File.join(STORE_DIR, 'icon-512.png')
+  FileUtils.cp(icon, File.join(dir, 'images', 'icon.png')) if File.exist?(icon)
+  if notes[LOCALE]
+    UI.user_error!("release notes for #{LOCALE} exceed 500 characters") if notes[LOCALE].length > 500
+    FileUtils.mkdir_p(File.join(dir, 'changelogs'))
+    File.write(File.join(dir, 'changelogs', "#{version_code}.txt"), notes[LOCALE])
+  else
+    UI.important("no release notes for #{LOCALE} in store/release_notes/#{version_name}.txt")
+  end
+  UI.success("Metadata for #{LOCALE} prepared in #{METADATA_DIR}")
+end
+
+# Uploads store listing content without a binary. Release notes belong to a release, so they are
+# left to the internal / production lanes.
+def upload_store_content(text:, images:)
+  prepare_metadata
+  upload_to_play_store(
+    metadata_path: File.join(METADATA_DIR, 'android'),
+    skip_upload_apk: true,
+    skip_upload_aab: true,
+    skip_upload_metadata: !text,
+    skip_upload_images: !images,
+    skip_upload_screenshots: !images,
+    skip_upload_changelogs: true,
+    track: 'production',
+    release_status: 'draft'
+  )
+end
+
+platform :android do
+  desc 'Check that the service-account key can access the app on Google Play'
+  lane :validate do
+    validate_play_store_json_key
+    %w[internal production].each do |track|
+      begin
+        codes = google_play_track_version_codes(track: track)
+        UI.success("#{track} version codes: #{codes.inspect}")
+      rescue NoMethodError
+        # fastlane raises this when the track has no release yet: the API call itself worked.
+        UI.success("#{track}: no releases yet")
+      end
+    end
+  end
+
+  desc 'Lay out build/play_metadata from store/ without uploading anything'
+  lane :prepare do
+    prepare_metadata
+  end
+
+  desc 'Download the live Play listing (text, images, changelogs) into build/play_metadata_remote; changes nothing on Play or in store/'
+  lane :fetch_metadata do
+    # supply skips the download when the directory already exists
+    FileUtils.rm_rf(REMOTE_METADATA_DIR)
+    download_from_play_store(metadata_path: REMOTE_METADATA_DIR, track: 'production')
+    UI.success("Live listing saved in #{REMOTE_METADATA_DIR}")
+  end
+
+  desc 'Upload listing text only (title, short and full description), no binary'
+  lane :listing do
+    upload_store_content(text: true, images: false)
+  end
+
+  desc 'Upload screenshots, feature graphic and icon only, no binary'
+  lane :screenshots do
+    upload_store_content(text: false, images: true)
+  end
+
+  desc 'Upload listing text, screenshots and images, no binary'
+  lane :metadata do
+    upload_store_content(text: true, images: true)
+  end
+
+  desc 'Build the release app bundle'
+  lane :build do
+    Dir.chdir(PROJECT_ROOT) do
+      sh('flutter', 'build', 'appbundle', '--release')
+    end
+  end
+
+  desc 'Build and upload to the internal testing track'
+  lane :internal do |options|
+    build unless options[:skip_build]
+    prepare_metadata
+    upload_to_play_store(
+      track: 'internal',
+      aab: AAB_PATH,
+      metadata_path: File.join(METADATA_DIR, 'android'),
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: 'completed'
+    )
+  end
+
+  desc 'Build, upload to production and send for review (binary and release notes only; pass status:draft to keep it a draft, rollout:0.2 status:inProgress, or skip_upload:true to release a version already on Play)'
+  lane :production do |options|
+    build unless options[:skip_build]
+    prepare_metadata
+    status = options[:status] || 'completed'
+    rollout = options[:rollout]
+    # skip_upload:true re-releases the version code already on Play (e.g. a draft) without uploading the bundle again.
+    binary = options[:skip_upload] ? { skip_upload_aab: true, version_code: pubspec_version[1] } : { aab: AAB_PATH }
+    upload_to_play_store({
+      track: 'production',
+      metadata_path: File.join(METADATA_DIR, 'android'),
+      release_status: status,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: false
+    }.merge(binary).merge(rollout ? { rollout: rollout.to_s } : {}))
+  end
+end

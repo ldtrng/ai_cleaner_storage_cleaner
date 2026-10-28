@@ -53,3 +53,7 @@ android/*.jks
 
 # Firebase config (API key) — keep out of the public repo
 android/app/google-services.json
+
+# Play publishing (fastlane): generated files
+android/fastlane/report.xml
+android/fastlane/README.md
