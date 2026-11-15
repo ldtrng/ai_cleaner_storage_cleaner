@@ -4,7 +4,7 @@ Storage cleaner for Android: duplicate / similar / blurry photos, duplicate & sc
 
 - Package: `io.ld2t.ai_cleaner` · minSdk 29 · targetSdk 36
 - Palette: `#0F2A1D` `#375534` `#6B9071` `#AEC3B0` `#E3EED4`
-- [Privacy Policy](docs/privacy-policy.md) · [Terms of Use](docs/terms.md)
+- [Privacy Policy](https://ldtrng.github.io/ai-cleaner-storage-cleaner/privacy-policy.html) · [Terms of Use](https://ldtrng.github.io/ai-cleaner-storage-cleaner/terms.html)
 - Release checklist: [PLAY_STORE.md](PLAY_STORE.md)
 
 ## Build

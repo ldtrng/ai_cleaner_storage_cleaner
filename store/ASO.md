@@ -37,7 +37,8 @@ Ngoài ra có app tên gần trùng: **"AI Cleaner – Phone Cleaner" (GRIMLAX T
 **Title (27/30):** `AI Cleaner: Storage Cleaner`
 - Giữ thương hiệu + đầu từ "storage cleaner" (Play index title mạnh nhất). Không emoji / CAPS / "best" / "free".
 
-**Short description (75/80):** `Delete duplicate photos, merge contacts, compress videos & reclaim storage.`
+**Short description (71/80, cập nhật 2026-11-15):** `Phone cleaner: delete duplicate photos, merge contacts, compress videos`
+- Thêm đầu từ "phone cleaner" (đối thủ top đều dùng), giữ "duplicate photos", "contacts", "compress videos"; "storage" đã có trong title.
 
 > ⚠️ **Nguồn chính thức của copy listing: `store/listing/short-description.txt` và `store/listing/full-description.txt`.** Khối full description bên dưới chỉ để tham khảo, có thể lỗi thời.
 
@@ -151,7 +152,7 @@ Cách tạo (lặp lại được):
 
 1. **Trùng tên "AI Cleaner":** đã có app cùng/ gần tên (Brain Trust "Phone Cleaner - AI Cleaner" 50M+; GRIMLAX ~3,3M theo trang tổng hợp). Tìm theo tên thương hiệu sẽ bị chìm, và Google có thể gỡ vì impersonation nếu bị khiếu nại. Cân nhắc brand riêng + giữ "Storage Cleaner" làm keyword (đổi `appName` trong `lib/main.dart` và `android:label` trong `AndroidManifest.xml`). Quyết định của bạn.
 2. **Claim "AI":** app phân tích on-device (hash / độ mờ). Dùng "AI" ở mức mô tả mềm, không hứa kiểu "AI tăng tốc máy".
-3. **Localization:** thêm `vi-VN`, và theo kinh nghiệm thị trường cleaner: `pt-BR`, `es-419`, `id`, `hi`, `ru`, `tr`. Dịch title + short desc + caption screenshot trước.
+3. **Localization:** thêm `vi`, và theo kinh nghiệm thị trường cleaner: `pt-BR`, `es-419`, `id`, `hi`, `ru`, `tr`. Dịch title + short desc + caption screenshot trước.
 4. **In-app review:** gọi `in_app_review` sau màn "Congratulations", để đạt ≥4.4★ sớm (đối thủ top 4.4–4.8).
 5. **Data safety** phải khớp SDK thực tế (AdMob + Firebase) — PLAY_STORE.md §5.
 6. **Sau launch:** theo dõi Android Vitals (crash <1,09%, ANR <0,47%); chạy experiment icon → screenshot đầu → short description.
@@ -179,3 +180,19 @@ Short description cũ có "free up storage" → Play Console hiện card **giớ
 - Nói "không có subscription / không có trial period" thay vì "no free trial".
 - Mọi copy mới phải chạy: `grep -n -i "free\|best\|#1" store/listing/*.txt store/feature.html store/screenshots/template.html`
 - Ghi chú: chữ "free" trong chính app (onboarding, settings) và privacy policy không phải metadata store, không ảnh hưởng.
+
+
+## 11. Cập nhật 2026-11-15: screenshot mới + tối ưu keyword + localization
+
+**Screenshots (làm lại, `store/screenshots/01.png … 08.png`, 1080×2160):**
+- Layout thiết kế bằng Stitch (project "AI Cleaner Play Screenshots"): phone nghiêng xen kẽ ±3,5°, glow chanh, chip kính mờ nêu lợi ích. Ảnh app thật trong `raw/` đặt vào khung phone; nguồn render `store/screenshots/template.html?n=1..8` (Chrome headless, 1080×2160). Template cũ đã xóa.
+- Chip chỉ ghi tính năng có thật (review trước khi xóa, nhóm ảnh trùng, chọn chất lượng nén, backup local, PIN/vân tay). **Không dùng số liệu bịa** như "2.4 GB reclaimed" mà Stitch tự sinh, vì ảnh app thật chỉ hiện MB; Play cấm ảnh sai sự thật.
+- Headline mới nhét keyword: "Clear phone storage", "duplicate photos", "similar photos", "blurry photos & screenshots", "Compress photos & videos", "duplicate contacts", "calendar events".
+- Thứ tự giữ nguyên (lợi ích chính trước). Test bằng Store listing experiment: bộ cũ vs bộ mới, ≥7 ngày.
+- Caption/chip đã grep: không có free/best/top/boost.
+
+**Full description (2.446/4.000):** mở đầu bằng nỗi đau "Phone storage full?" (truy vấn ý định cao), thêm keyword dài (storage cleaner, duplicate photo remover, video compressor, contacts merger, private photo vault, how to clear storage on Android), thêm đoạn "How to clear storage" 3 bước. Không hứa tính năng chưa có (không có junk/cache cleaner, không RAM/boost).
+
+**Localization (text only, `store/listing/locales/<locale>/`):** vi, pt-BR, es-419, id. Title/short/full đã dịch bằng keyword bản địa (dọn dẹp bộ nhớ, limpeza de celular, limpiar celular, pembersih HP). `fastlane listing` / `metadata` giờ upload cả các locale này (Fastfile kiểm giới hạn ký tự và từ cấm). Locale mới dùng screenshot en-US cho tới khi có ảnh riêng; **bản dịch do máy, nên nhờ người bản ngữ đọc lại trước khi lên production**.
+
+**Chưa làm:** title giữ nguyên "AI Cleaner: Storage Cleaner"; đổi tên thương hiệu vẫn là quyết định mở (§8.1). Feature graphic chưa làm lại.

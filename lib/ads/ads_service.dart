@@ -12,16 +12,16 @@ abstract final class AdIds {
   static const _real = kReleaseMode;
 
   static const banner = _real
-      ? 'ca-app-pub-2822978318382771/7345516786'
+      ? 'ca-app-pub-5764729052591112/5663317725'
       : 'ca-app-pub-3940256099942544/9214589741';
   static const interstitial = _real
-      ? 'ca-app-pub-2822978318382771/7961603610'
+      ? 'ca-app-pub-5764729052591112/7559028339'
       : 'ca-app-pub-3940256099942544/1033173712';
   static const native = _real
-      ? 'ca-app-pub-2822978318382771/1567585650'
+      ? 'ca-app-pub-5764729052591112/3619783328'
       : 'ca-app-pub-3940256099942544/2247696110';
   static const appOpen = _real
-      ? 'ca-app-pub-2822978318382771/1901618416'
+      ? 'ca-app-pub-5764729052591112/1017670719'
       : 'ca-app-pub-3940256099942544/9257395921';
 }
 

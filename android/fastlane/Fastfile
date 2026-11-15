@@ -26,7 +26,7 @@ LISTING_DIR = File.join(STORE_DIR, 'listing')
 METADATA_DIR = File.join(PROJECT_ROOT, 'build', 'play_metadata')
 REMOTE_METADATA_DIR = File.join(PROJECT_ROOT, 'build', 'play_metadata_remote')
 AAB_PATH = File.join(PROJECT_ROOT, 'build', 'app', 'outputs', 'bundle', 'release', 'app-release.aab')
-LOCALE = 'en-US' # the only listing language for now
+LOCALE = 'en-US' # default listing language; others live in store/listing/locales/
 BANNED_WORDS = /\bfree\b|\bbest\b|#1/i # store policy: no "free"/"best"/"#1" in any listing text
 
 def pubspec_version
@@ -70,6 +70,20 @@ def prepare_metadata
     File.write(File.join(dir, 'changelogs', "#{version_code}.txt"), notes[LOCALE])
   else
     UI.important("no release notes for #{LOCALE} in store/release_notes/#{version_name}.txt")
+  end
+  # Extra listing languages: store/listing/locales/<locale>/{title,short-description,full-description}.txt.
+  # Text only; Play shows the en-US screenshots and graphics for locales without their own.
+  Dir.glob(File.join(LISTING_DIR, 'locales', '*')).select { |d| File.directory?(d) }.sort.each do |locale_dir|
+    locale = File.basename(locale_dir)
+    out_dir = File.join(METADATA_DIR, 'android', locale)
+    FileUtils.mkdir_p(out_dir)
+    { 'title' => 30, 'short_description' => 80, 'full_description' => 4000 }.each do |out_name, max|
+      src = File.join(locale_dir, "#{out_name.tr('_', '-')}.txt")
+      text = File.read(src, encoding: 'UTF-8').strip
+      UI.user_error!("#{src} contains a banned word (#{text[BANNED_WORDS]})") if text =~ BANNED_WORDS
+      UI.user_error!("#{src} is #{text.length} characters, limit #{max}") if text.length > max
+      File.write(File.join(out_dir, "#{out_name}.txt"), text)
+    end
   end
   UI.success("Metadata for #{LOCALE} prepared in #{METADATA_DIR}")
 end

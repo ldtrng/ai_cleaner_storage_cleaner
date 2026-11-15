@@ -1,25 +1,48 @@
 <!doctype html><html><head><meta charset="utf-8"><style>
+/* Layout designed in Stitch (project "AI Cleaner Play Screenshots"), authored at 390x780 and scaled to 1080x2160. Real app captures from raw/ go in the phone. */
 @font-face{font-family:Outfit;src:url("../../assets/fonts/Outfit.ttf");font-weight:100 900}
 *{box-sizing:border-box;margin:0}
-body{width:1080px;height:2160px;overflow:hidden;font-family:Outfit,sans-serif;position:relative;background:linear-gradient(160deg,#3F6240 0%,#173424 55%,#0F2A1D 100%);color:#E3EED4}
-.glow{position:absolute;left:-200px;top:520px;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(217,242,107,.22),rgba(217,242,107,0) 65%)}
-h1{position:absolute;left:0;right:0;top:92px;text-align:center;font-size:96px;line-height:1.04;font-weight:700;letter-spacing:-2px}
+html,body{width:1080px;height:2160px;overflow:hidden;background:#07160E}
+#stage{position:absolute;left:0;top:0;width:390px;height:780px;transform:scale(2.769231);transform-origin:0 0;font-family:Outfit,sans-serif;color:#F1F7EC;overflow:hidden;background:linear-gradient(180deg,#0F2A1D 0%,#143321 48%,#06120B 100%)}
+.g1{position:absolute;left:50%;top:44%;width:360px;height:360px;margin:-180px 0 0 -180px;border-radius:50%;background:#D9F26B;opacity:.16;filter:blur(80px)}
+.g2{position:absolute;left:50%;top:34%;width:240px;height:240px;margin:-120px 0 0 -120px;border-radius:50%;background:#3F6240;opacity:.55;filter:blur(50px)}
+.sp{position:absolute;color:#D9F26B}
+.sp svg{width:100%;height:100%;display:block}
+header{position:absolute;left:0;right:0;top:34px;text-align:center;padding:0 22px}
+h1{font-size:36px;line-height:1.08;font-weight:800;letter-spacing:-.8px}
 h1 em{font-style:normal;color:#D9F26B}
-.sub{position:absolute;left:0;right:0;top:332px;text-align:center;font-size:40px;font-weight:500;color:#AEC3B0}
-.phone{position:absolute;left:140px;top:420px;width:800px;height:1740px;border-radius:84px 84px 0 0;background:#08140d;padding:14px 14px 0;box-shadow:0 40px 120px rgba(0,0,0,.55),0 0 0 3px rgba(227,238,212,.12)}
-.phone img{display:block;width:772px;height:1726px;object-fit:cover;object-position:top;border-radius:72px 72px 0 0}
-</style></head><body><div class="glow"></div><h1 id="h"></h1><div class="sub" id="s"></div><div class="phone"><img id="i"></div>
+.sub{margin-top:9px;font-size:15px;font-weight:500;color:#B9CBB9}
+.phone{position:absolute;left:60px;top:170px;width:270px;height:560px;border-radius:44px;background:#0A160F;border:3.5px solid #2A4833;padding:9px;box-shadow:0 24px 50px rgba(0,0,0,.85),0 0 28px rgba(217,242,107,.14);transform:rotate(var(--r,-3.5deg));overflow:hidden}
+.phone img{display:block;width:100%;height:100%;object-fit:cover;object-position:top;border-radius:35px}
+.flare{position:absolute;left:-80px;top:-90px;width:320px;height:170px;background:linear-gradient(135deg,rgba(255,255,255,.12),transparent);transform:rotate(25deg);pointer-events:none}
+.chip{position:absolute;display:flex;align-items:center;gap:9px;padding:8px 13px 8px 9px;border-radius:18px;background:rgba(18,43,29,.82);border:1px solid rgba(217,242,107,.3);box-shadow:0 16px 36px -8px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(16px);white-space:nowrap}
+.chip i{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:9px;background:rgba(217,242,107,.2);border:1px solid rgba(217,242,107,.4);color:#D9F26B;font-style:normal;font-size:14px;font-weight:800}
+.chip.solid i{background:#D9F26B;color:#0A1A10;border:none}
+.chip b{display:block;font-size:12.5px;font-weight:700;line-height:1}
+.chip s{display:block;text-decoration:none;font-size:10px;font-weight:500;color:#A6C0A9;margin-top:3px}
+</style></head><body><div id="stage">
+<div class="g1"></div><div class="g2"></div>
+<div class="sp" style="left:10px;top:8px;width:16px;height:16px;opacity:.8"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12 6.6 6.6 12 0 12c6.6 0 12 5.4 12 12 0-6.6 5.4-12 12-12-6.6 0-12-5.4-12-12z"/></svg></div>
+<div class="sp" style="right:26px;top:150px;width:14px;height:14px;opacity:.6"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12 6.6 6.6 12 0 12c6.6 0 12 5.4 12 12 0-6.6 5.4-12 12-12-6.6 0-12-5.4-12-12z"/></svg></div>
+<div class="sp" style="left:14px;top:600px;width:14px;height:14px;opacity:.4"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12 6.6 6.6 12 0 12c6.6 0 12 5.4 12 12 0-6.6 5.4-12 12-12-6.6 0-12-5.4-12-12z"/></svg></div>
+<header><h1 id="h"></h1><div class="sub" id="s"></div></header>
+<div class="phone" id="p"><div class="flare"></div><img id="i"></div>
+<div id="c"></div>
+</div>
 <script>
+// [headline, subtitle, raw image, tilt, chips[[icon,title,subtitle,solid,left,top]]]
 const D=[
- ["Reclaim space<br><em>in one tap</em>","","01_home"],
- ["Delete <em>duplicate</em><br>photos","","02_dups"],
- ["Keep the <em>sharpest</em>,<br>clear the rest","","03_similar"],
- ["Clear <em>blurry</em><br>photos","","04_blurry"],
- ["<em>Compress</em> photos<br>&amp; videos","","05_compress"],
- ["Merge <em>duplicate</em><br>contacts","","06_contacts"],
- ["Clean old<br><em>calendar events</em>","","07_events"],
- ["<em>Lock</em> private photos<br>&amp; contacts","100% on-device · No account","08_secret"]];
+ ["Clear phone storage<br>in <em>one tap</em>","Smart Clean finds it all in one scan","01_home","-3.5deg",[["✓","Review before delete","Nothing removed unasked",1,"r",160],["⚡","One scan","Photos · contacts · events",0,"l",612]]],
+ ["Delete <em>duplicate</em><br>photos","Keep the sharpest, clear the rest","02_dups","3.5deg",[["★","Sharpest shot suggested","Marked automatically",1,"r",160],["⧉","Grouped for you","Duplicates side by side",0,"l",612]]],
+ ["Remove <em>similar</em><br>photos","Pick the keeper, clear the rest","03_similar","-3.5deg",[["⧉","Similar shots grouped","Burst and near-copies",0,"r",160],["★","Keeper suggested","You stay in control",1,"l",612]]],
+ ["Clear <em>blurry</em> photos<br>&amp; screenshots","Spot the shots you never keep","04_blurry","3.5deg",[["◎","Blur detected","Sorted for quick review",0,"r",160],["✓","Preview first","Tap to inspect any item",1,"l",612]]],
+ ["<em>Compress</em> photos<br>&amp; videos","Choose High, Medium or Low quality","05_compress","-3.5deg",[["▤","You pick the quality","High · Medium · Low",1,"r",160],["⇩","Shrink large files","Photos and videos",0,"l",612]]],
+ ["Merge <em>duplicate</em><br>contacts","Tidy your address book in seconds","06_contacts","3.5deg",[["⇄","Merge in one tap","Duplicates grouped",1,"r",160],["↺","Local backup","Restore any time",0,"l",612]]],
+ ["Clean old<br><em>calendar events</em>","Delete past events in one go","07_events","-3.5deg",[["▦","Past events listed","Select what to remove",0,"r",160],["✓","You choose","Nothing deleted unasked",1,"l",612]]],
+ ["<em>Lock</em> private photos<br>&amp; contacts","100% on-device · No account","08_secret","3.5deg",[["🔒","PIN or fingerprint","Secret Space",1,"r",160],["◉","Stays on your phone","Never uploaded",0,"l",612]]]];
 const n=(+new URLSearchParams(location.search).get('n')||1)-1,d=D[n];
 document.getElementById('h').innerHTML=d[0];document.getElementById('s').textContent=d[1];
 document.getElementById('i').src="raw/"+d[2]+".png";
+document.getElementById('p').style.setProperty('--r',d[3]);
+document.getElementById('c').innerHTML=d[4].map(c=>`<div class="chip ${c[3]?'solid':''}" style="${c[4]=='l'?'left:10px':'right:10px'};top:${c[5]}px"><i>${c[0]}</i><div><b>${c[1]}</b><s>${c[2]}</s></div></div>`).join('');
 </script></body></html>

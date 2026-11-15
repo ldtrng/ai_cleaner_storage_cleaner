@@ -27,9 +27,9 @@ Mỗi lần upload bản mới phải tăng số sau dấu `+` trong `pubspec.ya
 
 ## 3. Trước khi gửi duyệt — cần thay
 
-Privacy policy & terms nằm trong repo, GitHub hiển thị trực tiếp (app mở các link này từ Settings):
-- Privacy policy: https://ldtrng.github.io/ai_cleaner_storage_cleaner/privacy-policy.html ← dán link này vào Play Console
-- Terms of use: https://ldtrng.github.io/ai_cleaner_storage_cleaner/terms.html
+Privacy policy & terms host ở repo ldtrng/ldtrng.github.io, folder `ai-cleaner-storage-cleaner/` (app mở các link này từ Settings):
+- Privacy policy: https://ldtrng.github.io/ai-cleaner-storage-cleaner/privacy-policy.html ← dán link này vào Play Console
+- Terms of use: https://ldtrng.github.io/ai-cleaner-storage-cleaner/terms.html
 - Repo phải để **public** thì link mới mở được. Sửa nội dung → commit & push là link tự cập nhật.
 - Email hỗ trợ: `ldtrong258@gmail.com` (`lib/core/config.dart`).
 
@@ -103,7 +103,7 @@ App ID và ad unit thật nằm trong `lib/ads/ads_service.dart` + `AndroidManif
 1. *Privacy & messaging* → tạo **GDPR message** (và US state message nếu muốn) cho app — không có message thì form consent UMP sẽ không hiện cho người dùng EEA/UK. App đã gọi UMP và có mục *Settings → Privacy settings* khi bắt buộc.
 2. Sau khi app lên Play: link app với Play Store trong AdMob, và đặt file `app-ads.txt` ở **gốc domain developer website** (khai trong Play Console) với nội dung:
    ```
-   google.com, pub-2822978318382771, DIRECT, f08c47fec0942fa0
+   google.com, pub-5764729052591112, DIRECT, f08c47fec0942fa0
    ```
 
 ## 7. Rủi ro duyệt cần biết
